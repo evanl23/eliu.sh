@@ -3,22 +3,40 @@
 . .././theme || exit
 . .././tools/repeat-char || exit
 
-# Set padding to match header
-padding=5
-padding_str=$(repeat-char ' ' "$padding")
+# Store the figure in an array
+mapfile -t FIGURE < <(./make-figure)
 
-padding2=25
-padding_str2=$(repeat-char ' ' "$padding2")
+# Store the box in an array
+mapfile -t BOX < <(
+  {
+    printf "${WHITE}To see the full menu options,${RESET}\n"
+    printf "${WHITE}enter this in your command prompt:\n"
+    printf "\n"
+    printf "${LIGHTERBLUE}\$ curl ${DARKERBLUE}eliu.sh/menu${RESET}"
+  } | ../tools/box -vp 1 -hp 1
+)
 
-printf "${BOLD}${TRUEBLUE}${padding_str2}${padding_str}                ▘       ▘     ▌
-${padding_str2}${padding_str}${padding_str}       ▛▘█▌▌▛▛▌▀▌▛▌▌▛▌█▌▛▌${RESET}
-   ${padding_str}${BABYBLUE}Welcome to my personal website,${RESET}   ${TRUEBLUE}▌ ▙▖▌▌▌▌█▌▙▌▌▌▌▙▖▙▌${RESET}   ${BABYBLUE}for the terminal.${RESET}
-${padding_str2}${padding_str}${padding_str}${padding_str}            ${TRUEBLUE}▄▌${RESET}"
-printf "\n\n"
-{
-  printf "${WHITE}To see the full menu options,${RESET}\n"
-  printf "${WHITE}enter this in your command prompt:\n"
-  printf "\n"
-  printf "${LIGHTERBLUE}\$ curl ${DARKERBLUE}eliu.sh/menu${RESET}"
-} | ../tools/box -vp 1 -hp 1 | .././tools/lpad "$padding_str"
+# Add empty lines at the beginning to move box down
+BOX=("" "" "" "" "${BOX[@]}")
 
+# Get the max number of lines between figure and box
+num_figure=${#FIGURE[@]}
+num_box=${#BOX[@]}
+max_lines=$(( num_figure > num_box ? num_figure : num_box ))
+
+# Get width of a figure line (stripped of ANSI)
+figure_width=$(echo "${FIGURE[0]}" | ../tools/strip-ansi)
+figure_len=${#figure_width}
+
+# Print line-by-line
+for ((i = 0; i < max_lines; i++)); do
+  line1="${FIGURE[i]}"
+  line2="${BOX[i]}"
+
+  # If figure line is missing, pad it
+  if [[ -z $line1 ]]; then
+    line1=$(../tools/repeat-char ' ' "$figure_len")
+  fi
+
+  echo "$line1      $line2"  # increased spacing to move box right
+done

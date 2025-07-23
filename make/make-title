@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+. .././theme || exit
+. .././tools/repeat-char || exit
+
+# Set padding to match header
+padding=5
+padding_str=$(repeat-char ' ' "$padding")
+
+padding2=25
+padding_str2=$(repeat-char ' ' "$padding2")
+
+printf "${BOLD}${TRUEBLUE}${padding_str2}${padding_str}                ▘       ▘     ▌
+${padding_str2}${padding_str}${padding_str}       ▛▘█▌▌▛▛▌▀▌▛▌▌▛▌█▌▛▌${RESET}
+   ${padding_str}${BABYBLUE}Welcome to my personal website,${RESET}   ${TRUEBLUE}▌ ▙▖▌▌▌▌█▌▙▌▌▌▌▙▖▙▌${RESET}   ${BABYBLUE}for the terminal.${RESET}
+${padding_str2}${padding_str}${padding_str}${padding_str}            ${TRUEBLUE}▄▌${RESET}\n"
+
+

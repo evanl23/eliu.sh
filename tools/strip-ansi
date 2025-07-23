@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+#
+# Strip ANSI sequences from stdin
+
+# echo ... | strip-ansi
+strip-ansi() (
+	shopt -s extglob
+	local IFS=
+	local line
+	while read -r line || [[ -n $line ]]; do
+		printf '%s\n' "${line//$'\e'[\[(]*([0-9;])[@-n]/}"
+	done
+)
+
+if ! (return &>/dev/null); then
+	strip-ansi "$@"
+fi

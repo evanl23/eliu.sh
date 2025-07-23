@@ -5,4 +5,6 @@
 # Generate the complete page without boxing or padding
 ./make-header
 echo
+./make-title
+echo
 ./make-body
