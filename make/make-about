@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+
+. .././theme || exit
+. .././tools/repeat-char || exit
+
+# Header with logo and basic info
+./make-header
+echo
+
+# About content with proper padding
+padding=5
+padding_str=$(repeat-char ' ' "$padding")
+
+printf "%s${WHITE}About Me${RESET}\n\n" "$padding_str"
+
+# About text with proper alignment
+about_lines=(
+    "${LIGHTERBLUE}Hello! So glad you are here! I am a Junior studying Computer Science Boston University.${RESET}"
+    "${LIGHTERBLUE}I love the nitty-gritty aspects of programing and enjoy getting down and dirty in low${RESET}"
+    "${LIGHTERBLUE}level projects. Currently, I am building a handheld Raman Spectroscope aimed to identify${RESET}"
+    "${LIGHTERBLUE}unknown chemicals with the scan of a laser. When I'm not coding, you can find me on the${RESET}"
+    "${LIGHTERBLUE}slopes of the Cascade Mountains or in the water at the local pool.${RESET}"
+    ""
+    "${WHITE}What I am familiar with:${RESET}"
+    ""
+    "${DARKERBLUE}• Python${RESET}"
+    "${DARKERBLUE}• FastAPI${RESET}"
+    "${DARKERBLUE}• Node.js${RESET}"
+    "${DARKERBLUE}• ECS${RESET}"
+    "${DARKERBLUE}• React${RESET}"
+    "${DARKERBLUE}• Java${RESET}"
+    "${DARKERBLUE}• C${RESET}"
+    ""
+    "${WHITE}Check out my main website at ${DARKERBLUE}https://evanpliu.com/about ${RESET}${WHITE}for more!${RESET}"
+)
+
+for line in "${about_lines[@]}"; do
+    if [[ -n "$line" ]]; then
+        printf "%s%s\n" "$padding_str" "$line"
+    else
+        printf "\n"
+    fi
+done
+
+echo

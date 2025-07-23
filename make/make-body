@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+. .././theme || exit
+. .././tools/repeat-char || exit
+
+# Set padding to match header
+padding=5
+padding_str=$(repeat-char ' ' "$padding")
+
+printf "${padding_str}${BOLD}${TRUEBLUE}Welcome to my personal website, reimagined for the terminal.${RESET}\n"
+
+printf "\n\n"
+# Generate navigation section content and wrap in box
+{
+    printf "${LIGHTERBLUE}\$ curl ${DARKERBLUE}eliu.sh/about${RESET}               ${GRAY300}Get to know a little more about me${RESET}\n"
+    printf "${LIGHTERBLUE}\$ curl ${DARKERBLUE}eliu.sh/projects${RESET}            ${GRAY300}Explore some of my cool builds${RESET}\n"
+    printf "${LIGHTERBLUE}\$ curl ${DARKERBLUE}eliu.sh/experience${RESET}          ${GRAY300}Check out where I have worked${RESET}\n"
+    printf "${LIGHTERBLUE}\$ curl -o Liu_Resume.pdf           ${GRAY300}Download everything in a nice PDF document${RESET}\n"
+    printf "       ${DARKERBLUE}eliu.sh/resume${RESET} "
+  } | .././tools/box -t "How to navigate my site" -vp 1 -hp 1 | .././tools/lpad "$padding_str"
+
+printf "\n"
+
+# Generate cool stuff section content and wrap in box
+{
+    printf "${LIGHTERBLUE}\$ curl ${DARKERBLUE}waves.eliu.sh${RESET} ${LIGHTERBLUE}| bash${RESET}        ${GRAY300}Animated sea waves${RESET}\n"
+    printf "${LIGHTERBLUE}\$ curl ${DARKERBLUE}study.eliu.sh${RESET} ${LIGHTERBLUE}| bash${RESET}        ${GRAY300}Some music for you while you study${RESET}\n"
+} | .././tools/box -t "Other cool stuff" -vp 1 -hp 1 | .././tools/lpad "$padding_str"
