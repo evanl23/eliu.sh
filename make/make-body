@@ -7,22 +7,18 @@
 padding=5
 padding_str=$(repeat-char ' ' "$padding")
 
-printf "${padding_str}${BOLD}${TRUEBLUE}Welcome to my personal website, reimagined for the terminal.${RESET}\n"
+padding2=25
+padding_str2=$(repeat-char ' ' "$padding2")
 
+printf "${BOLD}${TRUEBLUE}${padding_str2}${padding_str}                ▘       ▘     ▌
+${padding_str2}${padding_str}${padding_str}       ▛▘█▌▌▛▛▌▀▌▛▌▌▛▌█▌▛▌${RESET}
+   ${padding_str}${BABYBLUE}Welcome to my personal website,${RESET}   ${TRUEBLUE}▌ ▙▖▌▌▌▌█▌▙▌▌▌▌▙▖▙▌${RESET}   ${BABYBLUE}for the terminal.${RESET}
+${padding_str2}${padding_str}${padding_str}${padding_str}            ${TRUEBLUE}▄▌${RESET}"
 printf "\n\n"
-# Generate navigation section content and wrap in box
 {
-    printf "${LIGHTERBLUE}\$ curl ${DARKERBLUE}eliu.sh/about${RESET}               ${GRAY300}Get to know a little more about me${RESET}\n"
-    printf "${LIGHTERBLUE}\$ curl ${DARKERBLUE}eliu.sh/projects${RESET}            ${GRAY300}Explore some of my cool builds${RESET}\n"
-    printf "${LIGHTERBLUE}\$ curl ${DARKERBLUE}eliu.sh/experience${RESET}          ${GRAY300}Check out where I have worked${RESET}\n"
-    printf "${LIGHTERBLUE}\$ curl -o Liu_Resume.pdf           ${GRAY300}Download everything in a nice PDF document${RESET}\n"
-    printf "       ${DARKERBLUE}eliu.sh/resume${RESET} "
-  } | .././tools/box -t "How to navigate my site" -vp 1 -hp 1 | .././tools/lpad "$padding_str"
+  printf "${WHITE}To see the full menu options,${RESET}\n"
+  printf "${WHITE}enter this in your command prompt:\n"
+  printf "\n"
+  printf "${LIGHTERBLUE}\$ curl ${DARKERBLUE}eliu.sh/menu${RESET}"
+} | ../tools/box -vp 1 -hp 1 | .././tools/lpad "$padding_str"
 
-printf "\n"
-
-# Generate cool stuff section content and wrap in box
-{
-    printf "${LIGHTERBLUE}\$ curl ${DARKERBLUE}waves.eliu.sh${RESET} ${LIGHTERBLUE}| bash${RESET}        ${GRAY300}Animated sea waves${RESET}\n"
-    printf "${LIGHTERBLUE}\$ curl ${DARKERBLUE}study.eliu.sh${RESET} ${LIGHTERBLUE}| bash${RESET}        ${GRAY300}Some music for you while you study${RESET}\n"
-} | .././tools/box -t "Other cool stuff" -vp 1 -hp 1 | .././tools/lpad "$padding_str"
