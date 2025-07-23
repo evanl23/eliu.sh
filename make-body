@@ -15,8 +15,9 @@ printf "\n\n"
     printf "${LIGHTERBLUE}\$ curl ${DARKERBLUE}eliu.sh/about${RESET}               ${GRAY300}Get to know a little more about me${RESET}\n"
     printf "${LIGHTERBLUE}\$ curl ${DARKERBLUE}eliu.sh/projects${RESET}            ${GRAY300}Explore some of my cool builds${RESET}\n"
     printf "${LIGHTERBLUE}\$ curl ${DARKERBLUE}eliu.sh/experience${RESET}          ${GRAY300}Check out where I have worked${RESET}\n"
-    printf "${LIGHTERBLUE}\$ curl ${DARKERBLUE}eliu.sh/resume${RESET}              ${GRAY300}Download everything in a nice PDF document${RESET}\n"
-} | ./tools/box -t "How to navigate my site" -vp 1 -hp 1 | ./tools/lpad "$padding_str"
+    printf "${LIGHTERBLUE}\$ curl -o Liu_Resume.pdf           ${GRAY300}Download everything in a nice PDF document${RESET}\n"
+    printf "       ${DARKERBLUE}eliu.sh/resume${RESET} "
+  } | ./tools/box -t "How to navigate my site" -vp 1 -hp 1 | ./tools/lpad "$padding_str"
 
 printf "\n"
 
