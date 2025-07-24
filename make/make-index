@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
-. .././theme || exit
+. ../theme || exit
 
 # Generate the complete page without boxing or padding
 ./make-header
-echo
+
 ./make-title
 echo
 ./make-body

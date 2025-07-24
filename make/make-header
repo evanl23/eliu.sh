@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-. .././theme || exit
-. .././tools/repeat-char || exit
+. ../theme || exit
+. ../tools/repeat-char || exit
 
 padding=5
 padding_str=$(repeat-char ' ' "$padding")

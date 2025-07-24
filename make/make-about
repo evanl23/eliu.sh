@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-. .././theme || exit
-. .././tools/repeat-char || exit
+. ../theme || exit
+. ../tools/repeat-char || exit
 
 # Header with logo and basic info
 ./make-header
@@ -11,7 +11,7 @@ echo
 padding=5
 padding_str=$(repeat-char ' ' "$padding")
 
-printf "%s${WHITE}About Me${RESET}\n\n" "$padding_str"
+printf "%sAbout Me\n\n" "$padding_str"
 
 # About text with proper alignment
 about_lines=(
@@ -21,7 +21,7 @@ about_lines=(
     "${LIGHTERBLUE}unknown chemicals with the scan of a laser. When I'm not coding, you can find me on the${RESET}"
     "${LIGHTERBLUE}slopes of the Cascade Mountains or in the water at the local pool.${RESET}"
     ""
-    "${WHITE}What I am familiar with:${RESET}"
+    "What I am familiar with:"
     ""
     "${DARKERBLUE}• Python${RESET}"
     "${DARKERBLUE}• FastAPI${RESET}"
@@ -31,7 +31,7 @@ about_lines=(
     "${DARKERBLUE}• Java${RESET}"
     "${DARKERBLUE}• C${RESET}"
     ""
-    "${WHITE}Check out my main website at ${DARKERBLUE}https://evanpliu.com/about ${RESET}${WHITE}for more!${RESET}"
+    "Check out my main website at ${DARKERBLUE}https://evanpliu.com/about ${RESET}for more!${RESET}"
 )
 
 for line in "${about_lines[@]}"; do

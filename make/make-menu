@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-. .././theme || exit
-. .././tools/repeat-char || exit
+. ../theme || exit
+. ../tools/repeat-char || exit
 
 # Set padding to match header
 padding=5

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-. .././theme || exit
+. ../theme || exit
 
 cat << 'EOF'
                  /\

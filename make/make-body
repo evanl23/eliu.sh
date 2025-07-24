@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-. .././theme || exit
-. .././tools/repeat-char || exit
+. ../theme || exit
+. ../tools/repeat-char || exit
 
 # Store the figure in an array
 mapfile -t FIGURE < <(./make-figure)
@@ -9,10 +9,10 @@ mapfile -t FIGURE < <(./make-figure)
 # Store the box in an array
 mapfile -t BOX < <(
   {
-    printf "${WHITE}To see the full menu options,${RESET}\n"
-    printf "${WHITE}enter this in your command prompt:\n"
+    printf "To see the full menu options,\n"
+    printf "enter this in your command prompt:\n"
     printf "\n"
-    printf "${LIGHTERBLUE}\$ curl ${DARKERBLUE}eliu.sh/menu${RESET}"
+    printf "${LIGHTERBLUE}\$ curl${RESET} ${DARKERBLUE}eliu.sh/menu${RESET}"
   } | ../tools/box -vp 1 -hp 1
 )
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-. .././theme || exit
-. .././tools/repeat-char || exit
+. ../theme || exit
+. ../tools/repeat-char || exit
 
 # Header with logo and basic info
 ./make-header
@@ -11,7 +11,7 @@ echo
 padding=5
 padding_str=$(repeat-char ' ' "$padding")
 
-printf "%s${WHITE}My Projects${RESET}\n\n" "$padding_str"
+printf "%sMy Projects\n\n" "$padding_str"
 
 # Project entries
 projects=(
@@ -32,6 +32,6 @@ for project in "${projects[@]}"; do
     printf "%s  %s\n\n" "$padding_str" "$link"
 done
 
-printf "%s${WHITE}Want to see more? Check them out here:${RESET} ${DARKERBLUE}https://github.com/evanl23?tab=repositories ${RESET}\n" "$padding_str"
+printf "%sWant to see more? Check them out here: ${DARKERBLUE}https://github.com/evanl23?tab=repositories ${RESET}\n" "$padding_str"
 
 echo
