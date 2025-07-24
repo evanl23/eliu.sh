@@ -157,7 +157,8 @@ done
 #line=$color
 line=$color$SE$WE$RST
 line+=$tcolor$title$RST$color
-offset=$((${#title} + 1))
+title_stripped=$(strip-ansi <<< "$title")
+offset=$((${#title_stripped} + 1))
 for ((i = 0; i < num_cols; i++)); do
 	max_len=${max_cols[i]}
 	copy=$max_len

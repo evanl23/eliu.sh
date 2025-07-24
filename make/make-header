@@ -14,11 +14,11 @@ done < <(./make-logo)
 
 description=(
 	""
-	" Evan Liu"
-	" Boston University, Class of 2027"
-	" Check out my main website: ${DARKERBLUE}https://evanpliu.com${RESET}"
+	" ${BOLD}Evan Liu"
+	" ${BOLD}Boston University, Class of 2027"
+	" ${BOLD}Check out my main website:${RESET} ${DARKERBLUE}https://evanpliu.com${RESET}"
   ""
-  " Source code: ${DARKERBLUE}https://github.com/evanl23/eliu.sh${RESET}"
+  " ${BOLD}Source code:${RESET} ${DARKERBLUE}https://github.com/evanl23/eliu.sh${RESET}"
 )
 
 len=${#logo[@]}
