@@ -23,6 +23,7 @@ printf "\n"
 
 # Generate cool stuff section content and wrap in box
 {
-    printf "${LIGHTERBLUE}\$ curl ${DARKERBLUE}study.eliu.sh${RESET} ${LIGHTERBLUE}| bash${RESET}        ${GRAY300}Some music for you while you study${RESET}\n"
+  printf "${LIGHTERBLUE}\$ bash <(curl ${DARKERBLUE}dash.eliu.sh${RESET}${LIGHTERBLUE})${RESET}        ${GRAY300}Ever wanted to play Geometry Dash in the terminal?${RESET}\n"
+   printf "${LIGHTERBLUE}\$ curl ${DARKERBLUE}study.eliu.sh${RESET} ${LIGHTERBLUE}| bash${RESET}        ${GRAY300}Some music for you while you study${RESET}\n"
 } | .././tools/box -t "${BOLD}Other cool stuff" -vp 1 -hp 1 | .././tools/lpad "$padding_str"
 echo
