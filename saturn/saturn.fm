@@ -115,10 +115,10 @@ draw_menu() {
 	if $IS_PLAYING; then
 		status_text="♪ SATURN.FM - PLAYING ♪"
 	else
-		status_text="♫ SATURN.FM - PAUSED  ♫"
+		status_text="♫ SATURN.FM - PAUSED ♫"
 	fi
 
-	local controls_text="[ENTER] Play/Pause    [q] Quit"
+	local controls_text="[ENTER] Play/Stop    [q] Quit"
 
 	# Clear the status line first, then draw centered text
 	tput cup "$menu_row" 0
@@ -231,6 +231,11 @@ main() {
 		echo 'install "ffmpeg" with your package manager and try again'
 		fatal 'ffplay not found'
 	fi
+  
+  if ! command -v shuf &>/dev/null; then
+    echo 'shuf (by GNU) required for music shuffle'
+    echo 'install shuf through coreutils with your package manager and try again'
+  fi
 
 	# ensure we are called interactively
 	if [[ ! -t 1 ]]; then
@@ -276,7 +281,7 @@ main() {
 	mkfifo "$PIPE" || fatal "failed to create pipe $PIPE"
 	exec 3<>"$PIPE" || fatal "failed to open pipe $PIPE"
 	echo "created FIFO pipe: $PIPE"
-	echo 'use [ENTER] to play/pause music, [q] to quit'
+	echo 'use [ENTER] to play/stop music, [q] to quit'
 
 	# cleanup when program exits
 	trap cleanup exit
