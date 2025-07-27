@@ -110,7 +110,7 @@ for ((i = 0; i < 99; i++))
 do
   {
     printf "${colors[i]}"
-    cat "saturn-frames2/saturn${i}"
+    cat "saturn-nocolor/saturn${i}"
     printf '\033[0m'
   } > "saturn-frames/frame${i}.txt"
 done

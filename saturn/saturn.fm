@@ -133,18 +133,18 @@ draw-box() {
 
 # draw only the Saturn frame (no screen clearing to prevent flicker)
 draw_saturn_frame() {
-	local frame_file="saturn-frames/frame${CURRENT_FRAME}.txt"
+  local frame_file="saturn-frames/frame${CURRENT_FRAME}.txt"
 
   local frame_width=136
 
-	local row_pos=$1
+  local row_pos=$(( (LINES - 50) / 2 ))
 
-  local col_pos=$(( ($2 - frame_width) / 2 )) 
-	
-  tput cup $row_pos $col_pos
-	if [[ -f "$frame_file" ]]; then
-		cat "$frame_file"
-	fi
+  local col_pos=$(( ((COLUMNS - frame_width) / 2) + 20))
+
+  tput cup "$row_pos" 70
+  if [[ -f "$frame_file" ]]; then
+    printf "%s" "$(< "$frame_file")"
+  fi
 }
 
 # draw only the user menu at the bottom
@@ -159,7 +159,23 @@ draw_menu() {
 		status_text="♫ SATURN.FM - STOPPED ♫"
 	fi
 
-	local controls_text="[ENTER] Play/Stop    [q] Quit"
+	local controls_text="[ENTER] Play/Stop    [n] Skip    [q] Quit"
+
+	local song_name="${music_file##*/}"
+	song_name="${song_name%.*}"
+
+	# Draw current song
+	tput cup "$((menu_row - 2))" 0
+	printf '%-*s' "$COLUMNS" " "  # clear entire line
+	local playing_start=$(( (COLUMNS - ${#song_name} - 14) / 2 ))
+	tput cup "$((menu_row - 2))" "$playing_start"
+	tput setaf 207
+	tput bold
+	if $IS_PLAYING; then
+		printf 'Now playing: %s' "$song_name"
+	else
+		printf '             '
+	fi
 
 	# Clear the status line first, then draw centered text
 	tput cup "$menu_row" 0
@@ -184,7 +200,7 @@ draw_menu() {
 # initial setup - clear screen and draw both elements
 init_display() {
 	tput clear
-	draw_saturn_frame $1 $2
+	draw_saturn_frame
 	draw_menu
 }
 
@@ -257,6 +273,7 @@ read_keyboard_events_task() {
 		case "$data" in
 			'q') output='key-quit';;   # q for quit
 			'') output='key-enter';;  # enter key
+      'n') output='key-next';;   # n for next song
 		esac
 
 		if [[ -n $output ]]; then
@@ -273,6 +290,7 @@ main() {
 		fatal 'ffplay not found'
 	fi
   
+  # ensure music shuffler command is available
   if ! command -v shuf &>/dev/null; then
     echo 'shuf (by GNU) required for music shuffle'
     echo 'install shuf through coreutils with your package manager and try again'
@@ -322,7 +340,7 @@ main() {
 	mkfifo "$PIPE" || fatal "failed to create pipe $PIPE"
 	exec 3<>"$PIPE" || fatal "failed to open pipe $PIPE"
 	echo "created FIFO pipe: $PIPE"
-	echo 'use [ENTER] to play/stop music, [q] to quit'
+	echo 'use [ENTER] to play/stop music, [n] to skip to next song, and [q] to quit'
 
 	# cleanup when program exits
 	trap cleanup exit
@@ -370,7 +388,7 @@ main() {
 	echo "found $frame_count Saturn animation frames"
 
 	# draw initial UI
-	init_display $(( (LINES - 50) / 2 )) $COLUMNS
+	init_display
 
 	# start reading keyboard events in the background
 	read_keyboard_events_task <&4 &
@@ -402,6 +420,10 @@ main() {
 				key-quit)
 					exit 0
 					;;
+        key-next)
+          stop_music
+          play_music
+          ;;
 				music-start)
 					# music started playing - record the PID
 					local pid=${args[0]}
@@ -445,7 +467,7 @@ main() {
 			if $IS_PLAYING; then
 				((CURRENT_FRAME = (CURRENT_FRAME + 1) % frame_count))
 				# only redraw Saturn frame when animating
-				draw_saturn_frame $(( (LINES - 50) / 2 )) $COLUMNS
+				draw_saturn_frame 
 			fi
 			
 			loop_count=0
