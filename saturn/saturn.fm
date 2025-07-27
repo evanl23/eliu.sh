@@ -5,7 +5,7 @@
 # and stops when music is paused.
 
 TAGLINE='Saturn.FM - Cosmic Studying Experience'
-WEBSITE='https://github.com/eliu23/saturn.fm'
+WEBSITE='https://github.com/evanl23/saturn.fm'
 
 # Requirements
 MIN_COLUMNS=166
@@ -74,7 +74,7 @@ cleanup() {
 
 	# call to action
 	echo
-	echo 'Thanks for using Saturn.FM!'
+	echo 'Thanks for listening, check out the source code below!'
 	tput setaf 207
 	echo "=> $WEBSITE"
 	echo
@@ -95,12 +95,53 @@ cleanup() {
 	tput sgr0
 }
 
+draw-box() {
+	local offset=$1
+
+	# full line
+	local line=''
+	for ((i = 0; i < COLUMNS - (offset * 2 * 2); i++)); do
+		line+=' '
+	done
+
+	# draw top line
+	tput cup "$offset" "$((offset * 2))"
+	echo -n "$line"
+
+	# draw bottom line
+	tput cup "$((LINES - offset - 1))" "$((offset * 2))"
+	echo -n "$line"
+
+	_sleep .05
+
+	# draw left side line
+	local x=$((offset * 2))
+	for ((i = offset; i < LINES - offset - 1; i++)); do
+		tput cup "$i" "$x"
+		echo -n '  '
+	done
+
+	# draw right side line
+	local x=$((COLUMNS - (offset * 2) - 2))
+	for ((i = offset; i < LINES - offset - 1; i++)); do
+		tput cup "$i" "$x"
+		echo -n '  '
+	done
+
+	_sleep .05
+}
+
 # draw only the Saturn frame (no screen clearing to prevent flicker)
 draw_saturn_frame() {
 	local frame_file="saturn-frames/frame${CURRENT_FRAME}.txt"
+
+  local frame_width=136
+
+	local row_pos=$1
+
+  local col_pos=$(( ($2 - frame_width) / 2 )) 
 	
-	# position cursor at top and display the saturn frame
-	tput cup 0 0
+  tput cup $row_pos $col_pos
 	if [[ -f "$frame_file" ]]; then
 		cat "$frame_file"
 	fi
@@ -115,7 +156,7 @@ draw_menu() {
 	if $IS_PLAYING; then
 		status_text="♪ SATURN.FM - PLAYING ♪"
 	else
-		status_text="♫ SATURN.FM - PAUSED ♫"
+		status_text="♫ SATURN.FM - STOPPED ♫"
 	fi
 
 	local controls_text="[ENTER] Play/Stop    [q] Quit"
@@ -143,7 +184,7 @@ draw_menu() {
 # initial setup - clear screen and draw both elements
 init_display() {
 	tput clear
-	draw_saturn_frame
+	draw_saturn_frame $1 $2
 	draw_menu
 }
 
@@ -290,6 +331,35 @@ main() {
 	tput smcup
 	tput civis
 	stty -echo
+  
+  tput clear
+  tput setab 165; draw-box 23;
+  tput setab 164; draw-box 22;
+  tput setab 163; draw-box 21;
+  tput setab 162; draw-box 20; 
+  tput setab 161; draw-box 19;
+  tput setab 160; draw-box 18;
+  tput setab 129; draw-box 17;
+  tput setab 128; draw-box 16;
+  tput setab 127; draw-box 15;
+  tput setab 126; draw-box 14;
+  tput setab 125; draw-box 13;
+  tput setab 124; draw-box 12;
+  tput setab 93; draw-box 11;
+  tput setab 92; draw-box 10;
+  tput setab 91; draw-box 9;
+  tput setab 90; draw-box 8;
+  tput setab 89; draw-box 7;
+  tput setab 88; draw-box 6;
+  tput setab 57; draw-box 5;
+  tput setab 56; draw-box 4;
+  tput setab 55; draw-box 3;
+  tput setab 54; draw-box 2;
+  tput setab 53; draw-box 1;
+  tput setab 52; draw-box 0;
+  sleep 1
+
+  tput sgr0
 
 	# count available frames
 	local frame_count
@@ -300,7 +370,7 @@ main() {
 	echo "found $frame_count Saturn animation frames"
 
 	# draw initial UI
-	init_display
+	init_display $(( (LINES - 50) / 2 )) $COLUMNS
 
 	# start reading keyboard events in the background
 	read_keyboard_events_task <&4 &
@@ -308,9 +378,10 @@ main() {
 	# main event loop - hybrid approach for animations and events
 	local data
 	local last_playing_state=$IS_PLAYING
-	local frame_interval=10  # update frame every 10 loops (about 0.1 seconds)
+	local frame_interval=7  # update frame every 10 loops (about 0.1 seconds)
 	local loop_count=0
-	
+  
+  play_music
 	while true; do
 		# check for events with very short timeout
 		if read -t 0.01 -ra data <&3 2>/dev/null; then
@@ -374,7 +445,7 @@ main() {
 			if $IS_PLAYING; then
 				((CURRENT_FRAME = (CURRENT_FRAME + 1) % frame_count))
 				# only redraw Saturn frame when animating
-				draw_saturn_frame
+				draw_saturn_frame $(( (LINES - 50) / 2 )) $COLUMNS
 			fi
 			
 			loop_count=0
@@ -388,3 +459,4 @@ main() {
 }
 
 main "$@"
+
