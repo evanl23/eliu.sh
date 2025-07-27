@@ -112,7 +112,7 @@ draw-box() {
 	tput cup "$((LINES - offset - 1))" "$((offset * 2))"
 	echo -n "$line"
 
-	_sleep .05
+	_sleep .025
 
 	# draw left side line
 	local x=$((offset * 2))
@@ -128,7 +128,7 @@ draw-box() {
 		echo -n '  '
 	done
 
-	_sleep .05
+	_sleep .025
 }
 
 # draw only the Saturn frame (no screen clearing to prevent flicker)
@@ -136,14 +136,27 @@ draw_saturn_frame() {
   local frame_file="saturn-frames/frame${CURRENT_FRAME}.txt"
 
   local frame_width=136
+  local frame_height=40  # approximate height of Saturn frames
 
-  local row_pos=$(( (LINES - 50) / 2 ))
+  # Center both horizontally and vertically, then adjust up and right
+  local row_pos=$(( (LINES - frame_height) / 2 - 5 ))  # Move up by 5 rows
+  local col_pos=$(( (COLUMNS - frame_width) / 2 - 10 )) # Move right by 10 columns
 
-  local col_pos=$(( ((COLUMNS - frame_width) / 2) + 20))
+  # Ensure we don't go negative or beyond screen bounds
+  if (( col_pos < 0 )); then
+    col_pos=0
+  fi
+  if (( row_pos < 0 )); then
+    row_pos=0
+  fi
 
-  tput cup "$row_pos" 70
   if [[ -f "$frame_file" ]]; then
-    printf "%s" "$(< "$frame_file")"
+    local line_num=0
+    while IFS= read -r line; do
+      tput cup "$((row_pos + line_num))" "$col_pos"
+      printf "%s" "$line"
+      ((line_num++))
+    done < "$frame_file"
   fi
 }
 
@@ -169,7 +182,7 @@ draw_menu() {
 	printf '%-*s' "$COLUMNS" " "  # clear entire line
 	local playing_start=$(( (COLUMNS - ${#song_name} - 14) / 2 ))
 	tput cup "$((menu_row - 2))" "$playing_start"
-	tput setaf 207
+	tput setaf 63
 	tput bold
 	if $IS_PLAYING; then
 		printf 'Now playing: %s' "$song_name"
@@ -182,7 +195,7 @@ draw_menu() {
 	printf '%-*s' "$COLUMNS" " "  # clear entire line
 	local status_start=$(( (COLUMNS - ${#status_text}) / 2 ))
 	tput cup "$menu_row" "$status_start"
-	tput setaf 15
+	tput sgr0
 	tput bold
 	printf '%s' "$status_text"
 
@@ -191,7 +204,7 @@ draw_menu() {
 	printf '%-*s' "$COLUMNS" " "  # clear entire line
 	local controls_start=$(( (COLUMNS - ${#controls_text}) / 2 ))
 	tput cup $((menu_row + 2)) "$controls_start"
-	tput setaf 207
+	tput setaf 63
 	printf '%s' "$controls_text"
 
 	tput sgr0
