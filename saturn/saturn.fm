@@ -18,6 +18,7 @@ PIPE=
 CURRENT_FRAME=0
 IS_PLAYING=false
 BASE_URL="saturn.eliu.sh"
+CURRENT_MUSIC_FILE=""
 
 # sleep wrapper that silently fails
 _sleep() {
@@ -115,7 +116,7 @@ draw-box() {
 	tput cup "$((LINES - offset - 1))" "$((offset * 2))"
 	echo -n "$line"
 
-	_sleep .025
+	_sleep .035
 
 	# draw left side line
 	local x=$((offset * 2))
@@ -131,7 +132,7 @@ draw-box() {
 		echo -n '  '
 	done
 
-	_sleep .025
+	_sleep .035
 }
 
 # draw only the Saturn frame (no screen clearing to prevent flicker)
@@ -177,7 +178,7 @@ draw_menu() {
 
 	local controls_text="[ENTER] Play/Stop    [n] Skip    [q] Quit"
 
-	local song_name="${music_file##*/}"
+	local song_name="${CURRENT_MUSIC_FILE##*/}"
 	song_name="${song_name%.*}"
 
 	# Draw current song
@@ -230,7 +231,7 @@ stop_music() {
 }
 
 make_url() {
-  curl -s "$BASE_URL/songs/" | grep -oE 'href="[^"]+\.(mp3|wav|m4a|ogg|flac)"' | cut -d'"' -f2 | shuf -n 1 | awk -v base="$BASE_URL/songs/" '{ print base $0 }'	
+  curl -s "http://$BASE_URL/songs/" | grep -oE 'href="[^"]+\.(mp3|wav|m4a|ogg|flac)"' | cut -d'"' -f2 | shuf -n 1 | awk -v base="http://$BASE_URL/songs/" '{ print base $0 }'	
 }
 
 # play a random music file
@@ -238,15 +239,15 @@ play_music() {
 	# stop any existing music
 	stop_music
 	
-	local music_file
-  music_file=$(make_url)
+	CURRENT_MUSIC_FILE=$(make_url)
 
-	if [[ -z "$music_file" ]]; then
+	if [[ -z "$CURRENT_MUSIC_FILE" ]]; then
 		# no music files found, create a demo tone
+		CURRENT_MUSIC_FILE="Demo Music"
 		demo_music_task <&- &
 	else
 		# play the found music file
-		play_music_task "$music_file" <&- &
+		play_music_task "$CURRENT_MUSIC_FILE" <&- &
 	fi
 }
 
@@ -362,12 +363,7 @@ main() {
 	echo "created FIFO pipe: $PIPE"
 	echo 'use [ENTER] to play/stop music, [n] to skip to next song, and [q] to quit'
   
-  # create tmp directory for saturn frames
-  TMP_FRAME_DIR="/tmp/saturn_frames.$$"
-  mkdir -p "$TMP_FRAME_DIR"  
-  curl -s "$BASE_URL/saturn-frames.tar.gz" | tar -xz -C "$TMP_FRAME_DIR"
-
-	# cleanup when program exits
+  # cleanup when program exits
 	trap cleanup exit
 
 	# get the terminal ready for drawing
@@ -375,6 +371,23 @@ main() {
 	tput civis
 	stty -echo
   
+  tput clear
+  
+  # Show loading message while downloading frames
+  echo "Downloading Saturn animation frames..."
+  
+  # create tmp directory for saturn frames
+  TMP_FRAME_DIR="/tmp/saturn_frames.$$"
+  mkdir -p "$TMP_FRAME_DIR"  
+  
+  # Download frames FIRST, wait for completion to avoid CPU contention
+  if ! curl -s "http://$BASE_URL/saturn-frames.tar.gz" | tar -xz -C "$TMP_FRAME_DIR"; then
+    fatal "Failed to download Saturn frames"
+  fi
+  
+  echo "Frames downloaded, starting Saturn.FM..."
+  
+  # Now do the startup animation after download is complete
   tput clear
   tput setab 165; draw-box 23;
   tput setab 164; draw-box 22;
