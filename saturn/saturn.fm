@@ -17,6 +17,7 @@ NOW_PLAYING=false
 PIPE=
 CURRENT_FRAME=0
 IS_PLAYING=false
+BASE_URL="saturn.eliu.sh"
 
 # sleep wrapper that silently fails
 _sleep() {
@@ -71,6 +72,8 @@ cleanup() {
 		echo "removing pipe: $PIPE"
 		rm -f "$PIPE"
 	fi
+
+  rm -rf "$TMP_FRAME_DIR"
 
 	# call to action
 	echo
@@ -132,9 +135,9 @@ draw-box() {
 }
 
 # draw only the Saturn frame (no screen clearing to prevent flicker)
-draw_saturn_frame() {
-  local frame_file="saturn-frames/frame${CURRENT_FRAME}.txt"
-
+draw_saturn_frame() { 
+  local frame_file="$TMP_FRAME_DIR/saturn-frames/frame${CURRENT_FRAME}.txt"
+  
   local frame_width=136
   local frame_height=40  # approximate height of Saturn frames
 
@@ -226,15 +229,18 @@ stop_music() {
 	IS_PLAYING=false
 }
 
+make_url() {
+  curl -s "$BASE_URL/songs/" | grep -oE 'href="[^"]+\.(mp3|wav|m4a|ogg|flac)"' | cut -d'"' -f2 | shuf -n 1 | awk -v base="$BASE_URL/songs/" '{ print base $0 }'	
+}
+
 # play a random music file
 play_music() {
 	# stop any existing music
 	stop_music
 	
-	# find a random music file (looking for common audio formats)
-	local songs
-	music_file=$(find . -type f \( -name "*.mp3" -o -name "*.wav" -o -name "*.m4a" -o -name "*.ogg" -o -name "*.flac" \) 2>/dev/null | shuf -n 1)
-	
+	local music_file
+  music_file=$(make_url)
+
 	if [[ -z "$music_file" ]]; then
 		# no music files found, create a demo tone
 		demo_music_task <&- &
@@ -307,6 +313,7 @@ main() {
   if ! command -v shuf &>/dev/null; then
     echo 'shuf (by GNU) required for music shuffle'
     echo 'install shuf through coreutils with your package manager and try again'
+    fatal 'shuf is not found'
   fi
 
 	# ensure we are called interactively
@@ -354,6 +361,11 @@ main() {
 	exec 3<>"$PIPE" || fatal "failed to open pipe $PIPE"
 	echo "created FIFO pipe: $PIPE"
 	echo 'use [ENTER] to play/stop music, [n] to skip to next song, and [q] to quit'
+  
+  # create tmp directory for saturn frames
+  TMP_FRAME_DIR="/tmp/saturn_frames.$$"
+  mkdir -p "$TMP_FRAME_DIR"  
+  curl -s "$BASE_URL/saturn-frames.tar.gz" | tar -xz -C "$TMP_FRAME_DIR"
 
 	# cleanup when program exits
 	trap cleanup exit
@@ -394,7 +406,7 @@ main() {
 
 	# count available frames
 	local frame_count
-	frame_count=$(ls saturn-frames/frame*.txt 2>/dev/null | wc -l)
+	frame_count=$(ls $TMP_FRAME_DIR/saturn-frames/frame*.txt 2>/dev/null | wc -l)
 	if ((frame_count == 0)); then
 		fatal 'no Saturn frame files found in saturn-frames/'
 	fi
