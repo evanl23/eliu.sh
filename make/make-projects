@@ -15,12 +15,13 @@ printf "%s${BOLD}My Projects${RESET}\n\n" "$padding_str"
 
 # Project entries
 projects=(
-    "${LIGHTERBLUE}${BOLD}1. Similar Song Finder${RESET}|${GRAY300}A web app that helps users find similar songs using the text & audio embedding model, CLAP.${RESET}|${DARKERBLUE}https://github.com/evanl23/music-similarity${RESET}"
-    "${LIGHTERBLUE}${BOLD}2. Personal Website Reimagined (eliu.sh)${RESET}|${GRAY300}This terminal-based website you're browsing right now!${RESET}|${DARKERBLUE}https://github.com/evanl23/eliu.sh${RESET}"
-    "${LIGHTERBLUE}${BOLD}3. Handheld Raman Spectroscope${RESET}|${GRAY300}An iPhone detatchable device with the intent of identifying unique chemical signatures.${RESET}|${DARKERBLUE}https://github.com/evanl23/RamanSpectroscopy${RESET}"
-    "${LIGHTERBLUE}${BOLD}4. Personal AI Assistant${RESET}|${GRAY300}A proactive personal assistant that manages deadlines, meetings, and due-dates, all through SMS.${RESET}|${DARKERBLUE}https://github.com/evanl23/AI-Texting-Assistant${RESET}"
-    "${LIGHTERBLUE}${BOLD}5. Terminal Geometry Dash${RESET}|${GRAY300}An ASCII-style recreation of the popular Geometry Dash game by RobTop, designed to run in your terminal.${RESET}|${DARKERBLUE}https://github.com/evanl23/GeometryDash${RESET}"
-    "${LIGHTERBLUE}${BOLD}6. Trading Engine${RESET}|${GRAY300}Trading Engine Server that hosts servers for trading securities, allows clients to create orders, and match orders between clients.${RESET}|${DARKERBLUE}https://github.com/evanl23/Trading-Engine${RESET}"
+  "${LIGHTERBLUE}${BOLD}1. Saturn.fm${RESET}|${GRAY300}Saturn.fm is a lightweight terminal user interface (TUI) for playing jazz music, ran thorugh a curl command or installed via Homebrew.${RESET}|${DARKERBLUE}https://github.com/evanl23/saturn.fm${RESET}"
+    "${LIGHTERBLUE}${BOLD}2. Similar Song Finder${RESET}|${GRAY300}A web app that helps users find similar songs using the text & audio embedding model, CLAP.${RESET}|${DARKERBLUE}https://github.com/evanl23/music-similarity${RESET}"
+    "${LIGHTERBLUE}${BOLD}3. Personal Website Reimagined (eliu.sh)${RESET}|${GRAY300}This terminal-based website you're browsing right now!${RESET}|${DARKERBLUE}https://github.com/evanl23/eliu.sh${RESET}"
+    "${LIGHTERBLUE}${BOLD}4. Handheld Raman Spectroscope${RESET}|${GRAY300}An iPhone detatchable device with the intent of identifying unique chemical signatures.${RESET}|${DARKERBLUE}https://github.com/evanl23/RamanSpectroscopy${RESET}"
+    "${LIGHTERBLUE}${BOLD}5. Personal AI Assistant${RESET}|${GRAY300}A proactive personal assistant that manages deadlines, meetings, and due-dates, all through SMS.${RESET}|${DARKERBLUE}https://github.com/evanl23/AI-Texting-Assistant${RESET}"
+    "${LIGHTERBLUE}${BOLD}6. Terminal Geometry Dash${RESET}|${GRAY300}An ASCII-style recreation of the popular Geometry Dash game by RobTop, designed to run in your terminal.${RESET}|${DARKERBLUE}https://github.com/evanl23/GeometryDash${RESET}"
+    "${LIGHTERBLUE}${BOLD}7. Trading Engine${RESET}|${GRAY300}Trading Engine Server that hosts servers for trading securities, allows clients to create orders, and match orders between clients.${RESET}|${DARKERBLUE}https://github.com/evanl23/Trading-Engine${RESET}"
   )
 
 # Print projects with proper formatting
